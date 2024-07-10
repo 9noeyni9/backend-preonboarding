@@ -124,9 +124,52 @@ https://mangkyu.tistory.com/76
 https://velog.io/@iyvelog/%EC%9D%B8%EC%A6%9DAuthentication%EA%B3%BC-%EC%9D%B8%EA%B0%80Autharization
 ```
 
+---
+
 **JWT 기본 이해**
 
 - [ ]  JWT란 무엇인가요?
+
+### JWT
+> JWT(JSON Web Token)란 JSON 포맷을 이용하여 사용자에 대한 속성을 저장하는 Claim 기반의 Web Token
+일반적으로 쿠키 저장소를 사용해 JWT를 저장함
+
+### JWT의 사용 이유
+> 로그인 인증을 JWT 사용으로 다루지 않는다면 대용량 처리를 위해 많은 서버가 존재할 때 Session Storage 사용으로 서버에서 Client의 API 요청을 처리해야 함
+아와 다르게 JWT를 사용하면 로그인 정보를 Server에 저장하지 않고 Client에 로그인 정보를 JWT로 암호화해서 저장할 수 있는데 서버에 저장하는 방식이 아니기 때문에 서버의 과부하를 방지할 수 있음
+
+> JWT는 Client <-> API Server <-> Database 관계에서 Database의 역할을 제외시킨 것으로 볼 수 있음 데이터 수정은 데이터베이스에서만 가능하고 인증/인가 과정에선 데이터베이스의 정보를 읽을 수만 있는 것
+
+- Client에 로그인 정보를 JWT로 암호화하여 저장 : JWT 통한 인증/인가 방식
+- 모든 서버에서 동일한 Secret Key소유
+- 복호화 시 Secret Key 통해 암호화/ 위조 검증
+
+
+### JWT의 장/단점
+
+- 장점
+	- 동시 접속자가 많을 때 서버 측 부하를 낮춰줌
+    - Client, Server가 다른 도메인을 사용할 때 
+    - 서비스 관리 차원에선 유저에게 데이터 관리를 맡겼기 때문에 편리함
+    
+- 단점
+	- 구현의 복잡도 증가
+    - JWT에 담는 내용이 커질수록 네트워크 비용 증가(클라이언트 -> 서버)
+    - 기 생성된 JWT를 일부만 만료시킬 방법이 없음 
+    - __Secret Key 유출 시 JWT 조작 가능__
+    
+#### 단점 해결 방법
+- 대칭키 암호화 방식
+	- 보호할 데이터에 대해 비밀번호 정해 암호화 하면 비밀번호 없이는 복호화 불가능하게 하는 방법
+    	- 이 방식 사용하면 유저에게 해당 데이터들은 보여주지 않고 서버에서만 다룰 수 있음
+        
+- 대칭키 암호화를 유저-클라이언트 단에서 활용
+	- 정보 유출을 줄일 수 있고 복호화 불가하기 때문에 인증 수단으로 활용 불가능하게 함
+
+출처: [단점 해결 참고](https://youtu.be/THFmV5LPE6Y?si=pDWvE2RMmxh28bOU)
+
+- RefreshToken의 사용(참고 블로그 : [JWT Access Token, Refresh Token 사용 방식 정리, 장단점, 보안](https://aljjabaegi.tistory.com/708)
+
 
 **토큰 발행과 유효성 확인**
 
