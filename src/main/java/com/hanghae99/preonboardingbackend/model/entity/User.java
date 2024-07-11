@@ -4,10 +4,13 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import java.util.Set;
 
 @Entity
+@Table(name = "USER")
+@Getter
 @AllArgsConstructor
 @NoArgsConstructor
 public class User {
@@ -33,14 +36,19 @@ public class User {
     @JsonIgnore
     private boolean activated;
 
-    private UserRole role;
+    @ManyToMany
+    @JoinTable(
+            name = "user_authority",
+            joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "user_id")},
+            inverseJoinColumns = {@JoinColumn(name = "authority_name", referencedColumnName = "authority_name")})
+    private Set<Authority> authorities;
 
     @Builder
-    public User(String username, String password, String nickname, boolean activated, UserRole role){
+    public User(String username, String password, String nickname, boolean activated, Set<Authority> authorities){
         this.username = username;
         this.password = password;
         this.nickname = nickname;
         this.activated = activated;
-        this.role = role;
+        this.authorities = authorities;
     }
 }
